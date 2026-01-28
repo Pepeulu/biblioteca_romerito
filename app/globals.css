@@ -32,11 +32,18 @@ body {
   box-sizing: border-box;
 }
 body {
+  display: flex;
   scroll-behavior: smooth;
+  flex-direction: column;
+  align-items: center;
+  flex-wrap: wrap;
+  flex-grow: 1;
   background-color: black;
+
 }
 header.header {
   height: 5em;
+  width: 100%;
   display: flex;
   flex-direction: row;
   align-items: center;

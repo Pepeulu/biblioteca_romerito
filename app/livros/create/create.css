@@ -1,0 +1,82 @@
+.conteudo {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2em;
+  background-color: #000;
+  filter: drop-shadow(20%);
+}
+
+.form-container {
+  width: 100%;
+  max-width: 420px;
+  background-color: #dcdcdc;
+  border-radius: 16px;
+
+}
+
+.form-container form {
+  color: #111;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8em;
+  padding: 2em;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+}
+
+.form-container input {
+  padding: 0.7em 0.9em;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  font-size: 0.95em;
+  transition: all 0.2s ease;
+  background-color: #fff;
+}
+
+/* Placeholder */
+.form-container input::placeholder {
+  color: #999;
+}
+
+/* Focus */
+.form-container input:focus {
+  outline: none;
+  border-color: #000;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.15);
+}
+
+/* Input file */
+.form-container input[type="file"] {
+  padding: 0.4em;
+  font-size: 0.85em;
+}
+
+/* Input readonly */
+.form-container input[readonly] {
+  background-color: #e9ecef;
+  color: #555;
+  cursor: not-allowed;
+}
+
+/* Botão */
+.form-container button {
+  margin-top: 1em;
+  padding: 0.75em;
+  border-radius: 12px;
+  border: none;
+  background-color: #000;
+  color: #fff;
+  font-size: 1em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s ease, background-color 0.2s ease;
+}
+
+.form-container button:hover {
+  background-color: #222;
+  transform: translateY(-10px);
+}
+
+
