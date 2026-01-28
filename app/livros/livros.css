@@ -1,0 +1,21 @@
+.conteudo{
+    
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 20px 40px;
+    justify-content: center;
+    align-items: center;
+    margin: 2em 2em 2em 2em;
+    
+}
+.card{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: center;
+    
+}
+.card img{
+    border-radius: 15px;
+}
