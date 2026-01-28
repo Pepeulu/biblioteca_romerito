@@ -1,6 +1,6 @@
 import Image from "next/image";
 import "./livros.css";
-import BookCard from "../components/BookCard";
+import BookCard from "../../components/BookCard";
 
 export default function Home() {
   return (

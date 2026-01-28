@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Image from "next/image";
-import HeaderComponent from "./components/HeaderComponent";
+import HeaderComponent from "../components/HeaderComponent";
 
 export default function RootLayout({
   children,

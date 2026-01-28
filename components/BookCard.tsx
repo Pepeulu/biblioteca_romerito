@@ -20,7 +20,7 @@ export default function BookCard({ titulo, imagem }: BookCardProps) {
         />
       </div>
       <div>
-        <p className="" > {titulo} </p>
+        <p className="card-title" > {titulo} </p>
       </div>
     </CardContainer>
   )
