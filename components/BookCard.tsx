@@ -17,6 +17,7 @@ export default function BookCard({ titulo, imagem }: BookCardProps) {
           alt={titulo}
           sizes="(max-width: 600px) 100vw, 200px"
           className="flex-auto"
+          
         />
       </div>
       <div>

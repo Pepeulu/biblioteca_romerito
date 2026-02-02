@@ -2,6 +2,7 @@
 
 import React from "react"
 import axios from "axios"
+import { API_BASE_URL } from "@/config/api"
 
 type CreateLivroComponentProps = {
   children?: React.ReactNode
@@ -16,7 +17,7 @@ export default function CreateLivroComponent({ children }: CreateLivroComponentP
 
     try {
       const response = await axios.post(
-        "http://localhost:8000/livros/",
+        `${API_BASE_URL}/livros/`,
         formData,
         {
           headers: {
