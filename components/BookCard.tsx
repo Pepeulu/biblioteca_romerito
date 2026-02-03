@@ -16,12 +16,12 @@ export default function BookCard({ titulo, imagem }: BookCardProps) {
           src={imagem}
           alt={titulo}
           sizes="(max-width: 600px) 100vw, 200px"
-          className="flex-auto"
+          className="flex-auto rounded-2xl"
           
         />
       </div>
       <div>
-        <p className="card-title" > {titulo} </p>
+        <p className="text-xl font-bold text-white mt-2 text-center">{titulo}</p>
       </div>
     </CardContainer>
   )

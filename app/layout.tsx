@@ -11,7 +11,7 @@ children: React.ReactNode;
 }>) {
   return (
     <html lang="en">
-      <body className="">
+      <body className="flex flex-col items-center flex-wrap flex-grow scroll-smooth bg-black min-h-screen">
         <HeaderComponent titulo="Biblioteca" logoUrl="/logo.png"></HeaderComponent>
         {children}
       </body>

@@ -2,7 +2,9 @@
 
 import React, { useState } from "react"
 import axios from "axios"
+import { useRouter } from "next/navigation"
 import { API_BASE_URL } from "@/config/api"
+import Button from "./Button"
 
 type DeleteLivroComponentProps = {
   livroId: number
@@ -19,8 +21,10 @@ export default function DeleteLivroComponent({
   onCancel,
   children 
 }: DeleteLivroComponentProps) {
+  const router = useRouter()
   const [error, setError] = useState<string | null>(null)
-  const [confirmDelete, setConfirmDelete] = useState(false)
+  const [confirmDelete, setConfirmDelete] = useState(true)
+  const [success, setSuccess] = useState(false)
 
   async function handleDelete() {
     setError(null)
@@ -29,10 +33,15 @@ export default function DeleteLivroComponent({
       await axios.delete(`${API_BASE_URL}/livros/${livroId}/`)
 
       console.log("Livro deletado com sucesso")
+      setSuccess(true)
 
       if (onSuccess) {
         onSuccess()
       }
+
+      setTimeout(() => {
+        router.push('/livros')
+      }, 1500)
 
     } catch (err) {
       setError("ID inválido ou livro não encontrado")
@@ -42,30 +51,32 @@ export default function DeleteLivroComponent({
 
   if (confirmDelete) {
     return (
-      <div className="form-container delete-confirmation">
-        <div className="confirmation-box">
+      <div className="w-full max-w-[420px] bg-gray-300 rounded-2xl p-8 shadow-[0_10px_30px_rgba(0,0,0,0.6)]">
+        <div className="flex flex-col gap-4 text-gray-900">
           <p>Tem certeza que deseja deletar <strong>"{livroNome}"</strong>?</p>
-          <p style={{ color: "#666", fontSize: "0.9em" }}>Esta ação não pode ser desfeita.</p>
+          <p className="text-gray-600 text-sm">Esta ação não pode ser desfeita.</p>
           
-          {error && <p style={{ color: "red" }}>{error}</p>}
+          {error && <p className="text-red-600">{error}</p>}
+          {success && <p className="text-green-600">Livro deletado com sucesso! Redirecionando...</p>}
 
-          <div className="button-group">
-            <button 
+          <div className="flex gap-4 mt-4">
+            <Button 
               onClick={handleDelete}
-              style={{ backgroundColor: "#dc3545" }}
+              variant="danger"
+              fullWidth
             >
               Sim, deletar
-            </button>
+            </Button>
             
-            <button 
+            <Button 
               onClick={() => {
                 setConfirmDelete(false)
                 if (onCancel) onCancel()
               }}
-              style={{ backgroundColor: "#6c757d" }}
+              fullWidth
             >
               Cancelar
-            </button>
+            </Button>
           </div>
         </div>
         {children}
@@ -74,13 +85,14 @@ export default function DeleteLivroComponent({
   }
 
   return (
-    <div className="form-container">
-      <button 
+    <div className="w-full max-w-[420px] bg-gray-300 rounded-2xl p-8 shadow-[0_10px_30px_rgba(0,0,0,0.6)]">
+      <Button 
         onClick={() => setConfirmDelete(true)}
-        style={{ backgroundColor: "#dc3545" }}
+        variant="danger"
+        fullWidth
       >
         Deletar Livro
-      </button>
+      </Button>
       {children}
     </div>
   )

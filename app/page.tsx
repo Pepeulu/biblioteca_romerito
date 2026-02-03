@@ -1,6 +1,6 @@
 
 export default function Home() {
   return (
-    <p>OI MUNDO</p>
+    <p className="text-white">OI MUNDO</p>
   );
-}
+} 

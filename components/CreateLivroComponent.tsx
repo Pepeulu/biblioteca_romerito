@@ -1,17 +1,24 @@
 'use client'
 
-import React from "react"
+import React, { useState } from "react"
 import axios from "axios"
+import { useRouter } from "next/navigation"
 import { API_BASE_URL } from "@/config/api"
+import Button from "./Button"
 
 type CreateLivroComponentProps = {
   children?: React.ReactNode
 }
 
 export default function CreateLivroComponent({ children }: CreateLivroComponentProps) {
+  const router = useRouter()
+  const [error, setError] = useState<string | null>(null)
+  const [success, setSuccess] = useState(false)
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
+    setError(null)
+    setSuccess(false)
 
     const formData = new FormData(e.currentTarget)
 
@@ -27,29 +34,44 @@ export default function CreateLivroComponent({ children }: CreateLivroComponentP
       )
 
       console.log("Livro criado:", response.data)
+      setSuccess(true)
+      
+      setTimeout(() => {
+        router.push('/livros')
+      }, 1500)
 
-    } catch (error) {
-      console.error("Erro ao criar livro:", error)
+    } catch (err) {
+      setError("Erro ao criar livro")
+      console.error("Erro ao criar livro:", err)
     }
   }
 
   return (
-    <div className="form-container">
-      <form onSubmit={handleSubmit} encType="multipart/form-data">
+    <div className="w-full max-w-[420px] bg-zinc-800 rounded-2xl">
+      {error && <p className="text-red-600 px-8 pt-4">{error}</p>}
+      {success && <p className="text-green-600 px-8 pt-4">Livro criado com sucesso! Redirecionando...</p>}
 
-        <input type="text" name="nome_livro" placeholder="Nome do livro" required />
+      <form onSubmit={handleSubmit} encType="multipart/form-data" className="text-black flex flex-col gap-3 p-8 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.6)]">
 
-        <input type="date" name="Ano_de_publicacao" required />
+        <input type="text" name="nome_livro" placeholder="Nome do livro" required className="px-4 py-3 rounded-lg border border-gray-300 text-base transition-all duration-200 bg-white placeholder:text-gray-400 focus:outline-none focus:border-black focus:ring-2 focus:ring-black/15" />
 
-        <input type="text" name="ISBN" required placeholder="ISBN"/>
+        <input type="date" name="Ano_de_publicacao" required className="px-4 py-3 rounded-lg border border-gray-300 text-base transition-all duration-200 bg-white focus:outline-none focus:border-black focus:ring-2 focus:ring-black/15" />
 
-        <input type="file" name="foto_livro" accept="image/*" />
+        <input type="text" name="ISBN" required placeholder="ISBN" className="px-4 py-3 rounded-lg border border-gray-300 text-base transition-all duration-200 bg-white placeholder:text-gray-400 focus:outline-none focus:border-black focus:ring-2 focus:ring-black/15" />
 
-        <input type="number" name="autor" value={1} readOnly />
+        <label className="flex flex-col gap-1 text-sm text-gray-700">
+          Foto do livro
+          <input type="file" name="foto_livro" accept="image/*" className="p-2 text-sm rounded-lg border border-gray-300 bg-white" />
+        </label>
 
-        <input type="file" name="livro_arquivo" accept=".pdf" />
+        <label className="flex flex-col gap-1 text-sm text-gray-700">
+          Arquivo PDF
+          <input type="file" name="livro_arquivo" accept=".pdf" className="p-2 text-sm rounded-lg border border-gray-300 bg-white" />
+        </label>
 
-        <button type="submit">Salvar</button>
+        <Button type="submit" fullWidth className="mt-4">
+          Salvar
+        </Button>
 
         {children}
       </form>
