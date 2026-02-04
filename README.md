@@ -1,5 +1,6 @@
 
 ## Instalacao
+baixe o node e o next js
 
 Instale as dependencias:
 
