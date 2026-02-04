@@ -1,6 +1,6 @@
 'use client'
 
-import Button from "./Button"
+import Button from "./ButtonComponent"
 
 type FilterValues = {
   searchQuery: string
@@ -11,7 +11,6 @@ type FilterValues = {
 
 type LivroFilterProps = {
   filters: FilterValues
-  totalCount: number
   onSearchChange: (value: string) => void
   onOrdenarChange: (value: string) => void
   onAnoMinChange: (value: string) => void
@@ -21,7 +20,6 @@ type LivroFilterProps = {
 
 export default function LivroFilter({
   filters,
-  totalCount,
   onSearchChange,
   onOrdenarChange,
   onAnoMinChange,
@@ -29,9 +27,9 @@ export default function LivroFilter({
   onLimparFiltros,
 }: LivroFilterProps) {
   return (
-    <div className="bg-zinc-800 rounded-xl p-6 mb-8">
-      <div className="flex flex-wrap gap-4 items-end">
-        <div className="flex flex-col gap-1">
+    <div className="bg-zinc-800 rounded-xl p-6 mb-8 w-full max-w-7xl mx-auto flex-shrink-0">
+      <div className="flex flex-wrap gap-4 items-end align-middle justify-center">
+        <div className="flex flex-col gap-1 flex-shrink-0">
           <label className="text-white text-sm">Buscar</label>
           <input
             type="text"
@@ -42,7 +40,7 @@ export default function LivroFilter({
           />
         </div>
         
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col gap-1 flex-shrink-0">
           <label className="text-white text-sm">Ordenar por</label>
           <select
             value={filters.ordenar}
@@ -57,7 +55,7 @@ export default function LivroFilter({
           </select>
         </div>
         
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col gap-1 flex-shrink-0">
           <label className="text-white text-sm">Ano mínimo</label>
           <input
             type="number"
@@ -68,7 +66,7 @@ export default function LivroFilter({
           />
         </div>
         
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col gap-1 flex-shrink-0">
           <label className="text-white text-sm">Ano máximo</label>
           <input
             type="number"
@@ -79,13 +77,9 @@ export default function LivroFilter({
           />
         </div>
         
-        <Button onClick={onLimparFiltros} className="h-11 w-64">
+        <Button onClick={onLimparFiltros} className="h-11 w-64 flex-shrink-0">
           Limpar Filtros
         </Button>
-      </div>
-      
-      <div className="mt-4 text-gray-400 text-sm">
-        {totalCount} livro(s) encontrado(s)
       </div>
     </div>
   )

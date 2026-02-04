@@ -3,11 +3,10 @@
 import React, { useEffect, useState } from "react"
 import axios from "axios"
 import { API_BASE_URL } from "@/config/api"
-import Button from "./Button"
+import Button from "./ButtonComponent"
 
 type EditLivroComponentProps = {
   livroId: number
-  onSuccess?: () => void
   children?: React.ReactNode
 }
 
@@ -20,10 +19,8 @@ type Livro = {
   livro_arquivo: string | null
 }
 
-export default function EditLivroComponent({ livroId, onSuccess, children }: EditLivroComponentProps) {
+export default function EditLivroComponent({ livroId, children }: EditLivroComponentProps) {
   const [livro, setLivro] = useState<Livro | null>(null)
-  const [error, setError] = useState<string | null>(null)
-  const [success, setSuccess] = useState(false)
 
   useEffect(() => {
     async function fetchLivro() {
@@ -31,8 +28,7 @@ export default function EditLivroComponent({ livroId, onSuccess, children }: Edi
         const response = await axios.get(`${API_BASE_URL}/livros/${livroId}/`)
         setLivro(response.data)
       } catch (err) {
-        setError("ID inválido ou livro não encontrado")
-        console.error("Erro ao buscar livro:", err)
+        console.log("Erro ao buscar livro:", err)
       }
     }
 
@@ -41,8 +37,6 @@ export default function EditLivroComponent({ livroId, onSuccess, children }: Edi
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
-    setError(null)
-    setSuccess(false)
 
     const formData = new FormData(e.currentTarget)
 
@@ -58,26 +52,17 @@ export default function EditLivroComponent({ livroId, onSuccess, children }: Edi
       )
 
       console.log("Livro atualizado:", response.data)
-      setSuccess(true)
       setLivro(response.data)
-      
-      if (onSuccess) {
-        onSuccess()
-      }
 
     } catch (err) {
-      setError("Erro ao atualizar livro")
-      console.error("Erro ao atualizar livro:", err)
+      console.log("Erro ao atualizar livro:", err)
     }
   }
 
-  if (error) return <div className="w-full max-w-[420px] bg-gray-300 rounded-2xl p-8"><p className="text-red-600">{error}</p></div>
-  if (!livro) return <div className="w-full max-w-[420px] bg-gray-300 rounded-2xl p-8"><p>Carregando...</p></div>
+  if (!livro) return null
 
   return (
     <div className="w-full max-w-[420px] bg-zinc-800 rounded-2xl">
-      {error && <p className="text-red-600 px-8 pt-4">{error}</p>}
-      {success && <p className="text-green-600 px-8 pt-4">Livro atualizado com sucesso!</p>}
 
       <form onSubmit={handleSubmit} encType="multipart/form-data" className="text-gray-900 flex flex-col gap-3 p-8 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.6)]">
 

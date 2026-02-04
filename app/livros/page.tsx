@@ -1,11 +1,12 @@
 'use client'
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import axios from "axios";
 import Link from "next/link";
-import BookCard from "../../components/BookCard";
-import Button from "../../components/Button";
-import LivroFilter from "../../components/LivroFilter";
+import BookCard from "../../components/BookCardComponent";
+import Button from "../../components/ButtonComponent";
+import LivroFilter from "../../components/LivroFilterComponent";
 import { API_BASE_URL } from "@/config/api";
 
 type Livro = {
@@ -24,24 +25,38 @@ type PaginatedResponse = {
   results: Livro[];
 };
 
-export default function LivrosPage() {
-  const [livros, setLivros] = useState<Livro[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+function LivrosPageContent() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   
-  // Filtros
-  const [searchQuery, setSearchQuery] = useState("");
-  const [ordenar, setOrdenar] = useState("");
-  const [anoMin, setAnoMin] = useState("");
-  const [anoMax, setAnoMax] = useState("");
+  const [livros, setLivros] = useState<Livro[]>([]);
+  
+  // Filtros - inicializados a partir da URL
+  const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || "");
+  const [ordenar, setOrdenar] = useState(searchParams.get('ordering') || "");
+  const [anoMin, setAnoMin] = useState(searchParams.get('ano_min') || "");
+  const [anoMax, setAnoMax] = useState(searchParams.get('ano_max') || "");
   
   // Paginação
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(parseInt(searchParams.get('page') || '1'));
   const [totalPages, setTotalPages] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
 
+  // Atualiza a URL
+  const updateURL = useCallback((params: { [key: string]: string }) => {
+    const urlParams = new URLSearchParams();
+    
+    Object.entries(params).forEach(([key, value]) => {
+      if (value) {
+        urlParams.set(key, value);
+      }
+    });
+    
+    const queryString = urlParams.toString();
+    router.push(`/livros${queryString ? `?${queryString}` : ''}`, { scroll: false });
+  }, [router]);
+
   const fetchLivros = useCallback(async () => {
-    setLoading(true);
     try {
       const params = new URLSearchParams();
       
@@ -51,18 +66,24 @@ export default function LivrosPage() {
       if (anoMax) params.append('ano_max', anoMax);
       params.append('page', currentPage.toString());
       
+      // Atualiza a URL
+      updateURL({
+        search: searchQuery,
+        ordering: ordenar,
+        ano_min: anoMin,
+        ano_max: anoMax,
+        page: currentPage.toString(),
+      });
+      
       const response = await axios.get<PaginatedResponse>(`${API_BASE_URL}/livros/?${params.toString()}`);
       
       setLivros(response.data.results);
       setTotalCount(response.data.count);
-      setTotalPages(Math.ceil(response.data.count / 10));
+      setTotalPages(Math.ceil(response.data.count / 12));
     } catch (err) {
-      setError("Erro ao carregar livros");
-      console.error("Erro ao buscar livros:", err);
-    } finally {
-      setLoading(false);
+      console.log("Erro ao buscar livros:", err);
     }
-  }, [searchQuery, ordenar, anoMin, anoMax, currentPage]);
+  }, [searchQuery, ordenar, anoMin, anoMax, currentPage, updateURL]);
 
   useEffect(() => {
     const debounceTimer = setTimeout(() => {
@@ -100,38 +121,23 @@ export default function LivrosPage() {
     setCurrentPage(1);
   };
 
-  if (error) {
-    return (
-      <div className="flex justify-center items-center min-h-[50vh]">
-        <p className="text-red-500 text-xl">{error}</p>
-      </div>
-    );
-  }
-
   return (
     <div className="p-8">
-      {/* Filtros */}
       <LivroFilter
         filters={{ searchQuery, ordenar, anoMin, anoMax }}
-        totalCount={totalCount}
         onSearchChange={handleSearch}
         onOrdenarChange={handleOrdenar}
         onAnoMinChange={handleAnoMinChange}
         onAnoMaxChange={handleAnoMaxChange}
         onLimparFiltros={limparFiltros}
       />
-      <div className="ml-auto">
-            <Button href="/livros/create">
-              + Novo Livro
-            </Button>
-          </div>
+      <div className="ml-auto flex flex-shrink-0 mb-6 max-w-7xl mx-auto w-full justify-center">
+        <Button href="/livros/create">
+          Novo Livro
+        </Button>
+      </div>
 
-      {/* Lista de livros */}
-      {loading ? (
-        <div className="flex justify-center items-center min-h-[30vh]">
-          <p className="text-white text-xl">Carregando livros...</p>
-        </div>
-      ) : livros.length === 0 ? (
+      {livros.length === 0 ? (
         <div className="flex justify-center items-center min-h-[30vh]">
           <p className="text-white text-xl">Nenhum livro encontrado</p>
         </div>
@@ -141,14 +147,13 @@ export default function LivrosPage() {
             <Link key={livro.id_livro} href={`/livros/${livro.id_livro}`}>
               <BookCard
                 titulo={livro.nome_livro}
-                imagem={livro.foto_livro || "/imagens_teste/aku.jpg"}
+                imagem={livro.foto_livro || "/placeholder_book.png"}
               />
             </Link>
           ))}
         </div>
       )}
 
-      {/* Paginação */}
       {totalPages > 1 && (
         <div className="flex justify-center items-center gap-4 mt-8">
           <Button
@@ -196,5 +201,13 @@ export default function LivrosPage() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function LivrosPage() {
+  return (
+    <Suspense fallback={null}>
+      <LivrosPageContent />
+    </Suspense>
   );
 }

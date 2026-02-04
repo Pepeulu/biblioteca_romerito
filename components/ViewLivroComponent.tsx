@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react"
 import axios from "axios"
 import { API_BASE_URL } from "@/config/api"
-import Button from "./Button"
+import Button from "./ButtonComponent"
 
 type ViewLivroComponentProps = {
   livroId: number
@@ -21,7 +21,6 @@ type Livro = {
 
 export default function ViewLivroComponent({ livroId, children }: ViewLivroComponentProps) {
   const [livro, setLivro] = useState<Livro | null>(null)
-  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     async function fetchLivro() {
@@ -29,16 +28,14 @@ export default function ViewLivroComponent({ livroId, children }: ViewLivroCompo
         const response = await axios.get(`${API_BASE_URL}/livros/${livroId}/`)
         setLivro(response.data)
       } catch (err) {
-        setError("ID inválido ou livro não encontrado")
-        console.error("Erro ao buscar livro:", err)
+        console.log("Erro ao buscar livro:", err)
       }
     }
 
     fetchLivro()
   }, [livroId])
 
-  if (error) return <div className="w-full max-w-[700px] min-w-[600px] bg-gray-600 rounded-2xl p-8"><p className="text-red-600">{error}</p></div>
-  if (!livro) return <div className="w-full max-w-[700px] min-w-[600px] bg-gray-600 rounded-2xl p-8"><p>Carregando...</p></div>
+  if (!livro) return null
 
   return (
     <div className="w-full max-w-[700px] min-w-[700px] bg-zinc-800 rounded-2xl p-8 align-items">

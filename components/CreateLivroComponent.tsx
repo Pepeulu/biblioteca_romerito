@@ -4,7 +4,7 @@ import React, { useState } from "react"
 import axios from "axios"
 import { useRouter } from "next/navigation"
 import { API_BASE_URL } from "@/config/api"
-import Button from "./Button"
+import Button from "./ButtonComponent"
 
 type CreateLivroComponentProps = {
   children?: React.ReactNode
@@ -12,13 +12,9 @@ type CreateLivroComponentProps = {
 
 export default function CreateLivroComponent({ children }: CreateLivroComponentProps) {
   const router = useRouter()
-  const [error, setError] = useState<string | null>(null)
-  const [success, setSuccess] = useState(false)
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
-    setError(null)
-    setSuccess(false)
 
     const formData = new FormData(e.currentTarget)
 
@@ -34,22 +30,15 @@ export default function CreateLivroComponent({ children }: CreateLivroComponentP
       )
 
       console.log("Livro criado:", response.data)
-      setSuccess(true)
-      
-      setTimeout(() => {
-        router.push('/livros')
-      }, 1500)
+      router.push('/livros')
 
     } catch (err) {
-      setError("Erro ao criar livro")
-      console.error("Erro ao criar livro:", err)
+      console.log("Erro ao criar livro:", err)
     }
   }
 
   return (
     <div className="w-full max-w-[420px] bg-zinc-800 rounded-2xl">
-      {error && <p className="text-red-600 px-8 pt-4">{error}</p>}
-      {success && <p className="text-green-600 px-8 pt-4">Livro criado com sucesso! Redirecionando...</p>}
 
       <form onSubmit={handleSubmit} encType="multipart/form-data" className="text-black flex flex-col gap-3 p-8 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.6)]">
 
