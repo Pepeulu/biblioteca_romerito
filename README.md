@@ -22,3 +22,7 @@ npm start
 ```
 
 Acesse em http://localhost:3000
+
+Link do Artigo Científico do projeto:
+
+[Artigo Científico](https://docs.google.com/document/d/172OynZSefWxoN1fvogjLe7mPf9P1j44ohYGnBymhhSE/edit?usp=sharing)
