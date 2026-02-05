@@ -1,5 +1,6 @@
 
-## Instalacao
+# Instalacao
+
 Baixe o node e o next js
 
 Instale as dependencias:
@@ -13,15 +14,18 @@ Inicie o servidor:
 ```bash
 npm run dev
 ```
+
 ou
+
 ```bash
 npm run build
 ```
+
 ```bash
 npm start
 ```
 
-Acesse em http://localhost:3000
+Acesse em <http://localhost:3000>
 
 Link do Artigo Científico do projeto:
 
