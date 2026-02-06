@@ -1,15 +1,13 @@
 
-# Instalacao
+# Instalacão dos frameworks e outras dependências
 
-Baixe o node e o next js
-
-Instale as dependencias:
+1. Baixe o node e o next js
 
 ```bash
 npm install
 ```
 
-Inicie o servidor:
+2. Inicie o servidor:
 
 ```bash
 npm run dev
@@ -25,7 +23,7 @@ npm run build
 npm start
 ```
 
-Acesse em <http://localhost:3000>
+3. Acesse em <http://localhost:3000>
 
 Link do Artigo Científico do projeto:
 
